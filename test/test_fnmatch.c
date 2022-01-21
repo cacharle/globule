@@ -22,3 +22,90 @@ Test(glbl_fnmatch, wildcard)
     cr_assert_eq(glbl_fnmatch("a*b*c", "aIIIbIIIc", 0), GLBL_FNM_MATCH);
     cr_assert_eq(glbl_fnmatch("a*b*c", "aIIIIIIc", 0), GLBL_FNM_NOMATCH);
 }
+
+Test(glbl_fnmatch, question_mark)
+{
+    cr_assert_eq(glbl_fnmatch("?", "", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("?", "a", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("x?x", "xax", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("x?x", "xx", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("x???x???x", "x123x456x", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("x??x???x", "x123x456x", 0), GLBL_FNM_NOMATCH);
+}
+
+Test(glbl_fnmatch, character_classes)
+{
+    cr_assert_eq(glbl_fnmatch("[zxc]", "z", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[zxc]", "x", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[zxc]", "c", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[zxc]", "j", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("x[zxc]x", "xcx", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("x[zxc]x", "xjx", 0), GLBL_FNM_NOMATCH);
+}
+
+Test(glbl_fnmatch, character_classes_range)
+{
+    cr_assert_eq(glbl_fnmatch("[a-c]", "a", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[a-c]", "b", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[a-c]", "c", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[a-c]", "x", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("x[a-c]x", "xcx", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("x[a-c]x", "xdx", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("[a-cF-G]", "d", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("[a-cF-G]", "b", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[a-cF-Z]", "H", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[a-cF-Z]", "I", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[a-cF-Z]", "c", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[a-cF-Z]", "C", 0), GLBL_FNM_NOMATCH);
+}
+
+Test(glbl_fnmatch, character_classes_complement)
+{
+    cr_assert_eq(glbl_fnmatch("[!zxc]", "j", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[!zxc]", "z", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("[!zxc]", "x", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("[!zxc]", "c", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("x[!zxc]x", "xcx", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("x[!zxc]x", "xjx", 0), GLBL_FNM_MATCH);
+}
+
+Test(glbl_fnmatch, character_classes_ranges_complement)
+{
+    cr_assert_eq(glbl_fnmatch("[!a-c]", "a", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("[!a-c]", "b", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("[!a-c]", "c", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("[!a-c]", "x", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("x[!a-c]x", "xcx", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("x[!a-c]x", "xdx", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[!a-cF-G]", "d", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[!a-cF-G]", "b", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("[!a-cF-Z]", "H", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("[!a-cF-Z]", "I", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("[!a-cF-Z]", "c", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("[!a-cF-Z]", "C", 0), GLBL_FNM_MATCH);
+}
+
+Test(glbl_fnmatch, character_classes_range_with_regular_character)
+{
+    cr_assert_eq(glbl_fnmatch("[fa-cF-Zg]", "a", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[fa-cF-Zg]", "b", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[fa-cF-Zg]", "H", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[fa-cF-Zg]", "Z", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[fa-cF-Zg]", "f", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[fa-cF-Zg]", "g", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[fa-cF-Zg]", "j", 0), GLBL_FNM_NOMATCH);
+}
+
+Test(glbl_fnmatch, character_classes_first_character_no_meaning)
+{
+    cr_assert_eq(glbl_fnmatch("x[]]x", "x]x", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("x[]a]x", "xax", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("x[]a]x", "x]x", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("x[]a]x", "x[x", 0), GLBL_FNM_NOMATCH);
+    cr_assert_eq(glbl_fnmatch("[][!]", "[", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[][!]", "!", 0), GLBL_FNM_MATCH);
+    cr_assert_eq(glbl_fnmatch("[][!]", "]", 0), GLBL_FNM_MATCH);
+}
+
+// Test(glbl_fnmatch, character_classes_error_no_closing_square_bracket)
+// Test(glbl_fnmatch, character_classes_error_no_character)
