@@ -107,5 +107,34 @@ Test(glbl_fnmatch, character_classes_first_character_no_meaning)
     cr_assert_eq(glbl_fnmatch("[][!]", "]", 0), GLBL_FNM_MATCH);
 }
 
-// Test(glbl_fnmatch, character_classes_error_no_closing_square_bracket)
+// Test(glbl_fnmatch, character_classes_hypen)
+// {
+//     cr_assert_eq(glbl_fnmatch("[-]", "-", 0), GLBL_FNM_MATCH);
+//     cr_assert_eq(glbl_fnmatch("[-]", "a", 0), GLBL_FNM_NOMATCH);
+//     cr_assert_eq(glbl_fnmatch("[-a]", "a", 0), GLBL_FNM_MATCH);
+//     cr_assert_eq(glbl_fnmatch("[a-]", "a", 0), GLBL_FNM_MATCH);
+//     cr_assert_eq(glbl_fnmatch("[a-c-]", "b", 0), GLBL_FNM_MATCH);
+//     cr_assert_eq(glbl_fnmatch("[a-c-]", "-", 0), GLBL_FNM_MATCH);
+//     cr_assert_eq(glbl_fnmatch("[-a-c]", "b", 0), GLBL_FNM_MATCH);
+//     cr_assert_eq(glbl_fnmatch("[-a-c]", "-", 0), GLBL_FNM_MATCH);
+// }
+//
+// Test(glbl_fnmatch, character_classes_hypen_and_square_bracket)
+// {
+//     cr_assert_eq(glbl_fnmatch("[]-]", "-", 0), GLBL_FNM_MATCH);
+//     cr_assert_eq(glbl_fnmatch("[]-]", "]", 0), GLBL_FNM_MATCH);
+//     cr_assert_eq(glbl_fnmatch("[]-]", "x", 0), GLBL_FNM_NOMATCH);
+// }
+
+Test(glbl_fnmatch, character_classes_error_no_closing_square_bracket)
+{
+    cr_assert_eq(glbl_fnmatch("[", "", 0), GLBL_FNM_ERROR_MISSING_CLOSING);
+    cr_assert_eq(glbl_fnmatch("[[", "", 0), GLBL_FNM_ERROR_MISSING_CLOSING);
+    cr_assert_eq(glbl_fnmatch("[]", "", 0), GLBL_FNM_ERROR_MISSING_CLOSING);
+    cr_assert_neq(glbl_fnmatch("[]]", "", 0), GLBL_FNM_ERROR_MISSING_CLOSING);
+    cr_assert_eq(glbl_fnmatch("[\0]", "", 0), GLBL_FNM_ERROR_MISSING_CLOSING);
+    cr_assert_eq(glbl_fnmatch("[a\0]", "", 0), GLBL_FNM_ERROR_MISSING_CLOSING);
+    cr_assert_eq(glbl_fnmatch("[abcd\0]", "", 0), GLBL_FNM_ERROR_MISSING_CLOSING);
+}
+
 // Test(glbl_fnmatch, character_classes_error_no_character)

@@ -72,6 +72,23 @@ _fnmatch(const char *pattern, const char *string, int flags)
 int
 glbl_fnmatch(const char *pattern, const char *string, int flags)
 {
-    // TODO: check for [ ] error before running fnmatch
+    bool in_class = false;
+    for (size_t i = 0; pattern[i] != '\0'; i++)
+    {
+        if (pattern[i] == '[')
+        {
+            i++;
+            if (pattern[i] == '\0')
+                return GLBL_FNM_ERROR_MISSING_CLOSING;
+            i++;
+            if (pattern[i] == '\0')
+                return GLBL_FNM_ERROR_MISSING_CLOSING;
+            in_class = true;
+        }
+        if (pattern[i] == ']')
+            in_class = false;
+    }
+    if (in_class)
+        return GLBL_FNM_ERROR_MISSING_CLOSING;
     return _fnmatch(pattern, string, flags) ? GLBL_FNM_MATCH : GLBL_FNM_NOMATCH;
 }

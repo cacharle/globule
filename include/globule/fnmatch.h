@@ -7,6 +7,7 @@
 
 #define GLBL_FNM_MATCH 0
 #define GLBL_FNM_NOMATCH 1
+#define GLBL_FNM_ERROR_MISSING_CLOSING 2
 
 int
 glbl_fnmatch(const char *pattern, const char *string, int flags);
