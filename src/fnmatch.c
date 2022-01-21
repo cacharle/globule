@@ -50,7 +50,7 @@ _fnmatch(const char *pattern, const char *string, int flags)
         pattern++;
         for (; *pattern != ']'; pattern++)
         {
-            if (pattern[0] == '-')
+            if (pattern[0] == '-' && pattern + 2 != closing)
             {
                 char range_start = pattern[-1];
                 char range_end = pattern[1];

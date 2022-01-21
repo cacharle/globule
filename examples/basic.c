@@ -12,7 +12,7 @@ main(void)
     // printf("%d\n", glbl_fnmatch("a*b*c", "afbc", 0) == GLBL_FNM_MATCH);
     // printf("%d\n", glbl_fnmatch("a*b*c", "afbdd", 0) == GLBL_FNM_MATCH);
 
-    printf("%d\n", glbl_fnmatch("[\0]", "z", 0));
+    printf("%d\n", glbl_fnmatch("[a-]", "-", 0));
 
     return 0;
 }
