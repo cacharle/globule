@@ -21,6 +21,7 @@ _fnmatch(const char *pattern, const char *string, int flags)
     }
     switch (*pattern)
     {
+    // TODO:
     // case '\\':
     //     if (!(flags & GLBL_FNM_NOESCAPE))
     //         pattern++;

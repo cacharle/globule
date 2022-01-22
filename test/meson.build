@@ -1,5 +1,6 @@
 sources = files(
   'test_fnmatch.c',
+  'test_glob.c',
 )
 cc = meson.get_compiler('c')
 criterion_dep = cc.find_library('criterion', required : true)
