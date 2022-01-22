@@ -12,7 +12,9 @@ main(void)
     // printf("%d\n", glbl_fnmatch("a*b*c", "afbc", 0) == GLBL_FNM_MATCH);
     // printf("%d\n", glbl_fnmatch("a*b*c", "afbdd", 0) == GLBL_FNM_MATCH);
 
-    printf("%d\n", glbl_fnmatch("[a-]", "-", 0));
+    // printf("%d\n", glbl_fnmatch("[a-]", "-", 0));
+
+    glbl_fnmatch("*/*", "/foo", GLBL_FNM_PATHNAME);
 
     return 0;
 }
