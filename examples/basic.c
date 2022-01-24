@@ -18,7 +18,7 @@ main(void)
     // glbl_fnmatch("*/*", "/foo", GLBL_FNM_PATHNAME);
 
     glbl_glob_t matches;
-    int         ret = glbl_glob("*.c", 0, NULL, &matches);
+    int         ret = glbl_glob("*/*.c", 0, NULL, &matches);
     printf("ret: %d\n", ret);
     for (int i = 0; i < matches.gl_pathc; i++)
     {

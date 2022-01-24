@@ -20,7 +20,7 @@ PointerAlignment: Right
 AlignConsecutiveDeclarations: Consecutive
 AlignConsecutiveAssignments: None
 AlignConsecutiveBitFields: Consecutive
-# AlignArrayOfStructures: Left  # clang-format 13 only
+AlignArrayOfStructures: Left  # clang-format 13 only
 AlignEscapedNewlines: Left
 AlignTrailingComments: true
 AlignAfterOpenBracket: Align
