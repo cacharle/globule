@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "globule/fnmatch.h"
+#include "globule/glob.h"
 
 int
 main(void)
@@ -14,7 +15,15 @@ main(void)
 
     // printf("%d\n", glbl_fnmatch("[a-]", "-", 0));
 
-    glbl_fnmatch("*/*", "/foo", GLBL_FNM_PATHNAME);
+    // glbl_fnmatch("*/*", "/foo", GLBL_FNM_PATHNAME);
 
+    glbl_glob_t matches;
+    int         ret = glbl_glob("*.c", 0, NULL, &matches);
+    printf("ret: %d\n", ret);
+    for (int i = 0; i < matches.gl_pathc; i++)
+    {
+        printf("%2d: %s\n", i, matches.gl_pathv[i]);
+    }
+    glbl_globfree(&matches);
     return 0;
 }
