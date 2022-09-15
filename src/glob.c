@@ -1,5 +1,6 @@
 #define _XOPEN_SOURCE 500
 #define _DEFAULT_SOURCE
+#define _DARWIN_C_SOURCE
 #include "globule/glob.h"
 #include "globule/fnmatch.h"
 #include <dirent.h>

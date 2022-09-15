@@ -6,7 +6,9 @@ project(
 )
 b_coverage=true
 add_global_arguments('-g', language : 'c')
-add_global_arguments('--coverage', language : 'c')
+if host_machine.system() == 'linux'
+  add_global_arguments('--coverage', language : 'c')
+endif
 incdir = include_directories('include')
 subdir('src')
 lib = library('globule', sources, include_directories : incdir)

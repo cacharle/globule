@@ -2,6 +2,7 @@
 #include <criterion/criterion.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "globule/glob.h"
 
 static char filepaths[][1024] = {
